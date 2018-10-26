@@ -1,20 +1,19 @@
 <template>
-    <div>
-        <ul class="top">
-            <li v-for='(i,index) in res' v-text='i' @click='toggle(index)' 
-            :class="{'active':page==index}" :key='index'></li>  
-        </ul>
-        <ul class="list">
-          <li v-for='(i,num) in arr' @click="xiang(num)">
-            <img :src="i.carousel_pictures[0].picture" alt="">
-            <h3 v-text='i.inventory_caption'></h3>
-            <p v-text='i.inventory_name'  class="miao"></p>
-            <p class="sales"><span>已售</span><span v-text='i.sold_quantity'></span></p>
-            <p class="price"><span>￥</span><span v-text='i.origin_price'></span></p>
-          </li>
-        </ul>
-        <Footer />
-    </div>
+  <div>
+    <ul class="top">
+      <li v-for='(i,index) in res' v-text='i' @click='toggle(index)' :class="{'active':page==index}" :key='index'></li>
+    </ul>
+    <ul class="list">
+      <li v-for='(i,num) in arr' @click="xiang(num)">
+        <img :src="i.carousel_pictures[0].picture" alt="">
+        <h3 v-text='i.inventory_caption'></h3>
+        <p v-text='i.inventory_name' class="miao"></p>
+        <p class="sales"><span>已售</span><span v-text='i.sold_quantity'></span></p>
+        <p class="price"><span>￥</span><span v-text='i.origin_price'></span></p>
+      </li>
+    </ul>
+    <Footer />
+  </div>
 </template>
 
 <script>
@@ -133,6 +132,6 @@ export default {
   color: red;
   position: absolute;
   left: 0.05rem;
-  bottom:0rem;
+  bottom: 0rem;
 }
 </style>

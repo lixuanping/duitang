@@ -2,7 +2,7 @@
 	<div id="box">
 		<ul>
         <li v-for='(n,index) in tab' :key='index'  @click='toggle(index)'>
-            <i :class="[FontSize[index],{'active':page==index}]"></i>
+                           <i :class="[FontSize[index],{'active':page==index}]"></i>
             <p v-text="n" :class="{'active':page==index}"></p>
         </li>
     </ul>
@@ -34,22 +34,21 @@ export default {
   methods: {
     toggle: function(index) {
       //点击tab的时候切换到需要的页面
-      if(index==0){
+      if (index == 0) {
         location.href = "#/ShouYe";
-      }else if(index==1){
+      } else if (index == 1) {
         location.href = "#/Find";
-      }else if(index==2){
-         location.href = "#/ShangDian";
-      }else if(index==3&&this.sessionStorage!=null){
-          location.href = "#/Me";
-      }else{
+      } else if (index == 2) {
+        location.href = "#/ShangDian";
+      } else if (index == 3 && this.sessionStorage != null) {
+        //判断是否登陆然后跳到对应的页面
+        location.href = "#/Me";
+      } else {
         location.href = "#/Xuan";
       }
-      
     }
   },
   mounted() {
-    console.log(this.sessionStorage)
     //让底部的颜色跟着跳过去
     if (this.$route.path == "/ShouYe") {
       this.page = 0;
@@ -59,7 +58,7 @@ export default {
       this.page = 2;
     } else if (this.$route.path == "/Xuan") {
       this.page = 3;
-    }else if (this.$route.path == "/Me") {
+    } else if (this.$route.path == "/Me") {
       this.page = 3;
     }
   }
@@ -91,8 +90,8 @@ li {
   color: #aaa;
   background: #eee;
 }
-p{
-    margin: 0;
+p {
+  margin: 0;
 }
 i {
   font-size: 0.2rem;
