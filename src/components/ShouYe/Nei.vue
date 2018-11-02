@@ -3,7 +3,7 @@
     <mu-paper :z-depth="1" class="demo-loadmore-wrap">
       <mu-container ref="container" class="demo-loadmore-content">
         <mu-load-more  :loading="loading" @load="load">
-            <li v-for='(i,index) in arr' @click="xiang(index)" :key='index'>
+            <li v-for='(i,index) in arr' @click="xiang(index)" :key='index' v-lazy="i">
                 <img :src="i.photo.path" alt="" class="datu">
                 <h4 v-text='i.msg' class="miao"></h4>
                 <p><i class="icon-xingxing iconfont"></i><span v-text='i.favorite_count'></span></p>
@@ -20,6 +20,7 @@
 
 <script>
 import $ from "jquery";
+
 export default {
   data() {
     return {
@@ -32,6 +33,7 @@ export default {
     getNews() {
       //一开始发起请求渲染到页面
       var self = this;
+      this.$loading.open();
       $.ajax({
         url: "http://localhost:18090/b",
         type: "get",
@@ -41,6 +43,7 @@ export default {
               self.arr = a;
             }
           }
+          self.$loading.close();
         }
       });
     },

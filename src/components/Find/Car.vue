@@ -84,24 +84,11 @@ export default {
       //点击删除
       var res = [];
       this.arr.forEach(item => {
-        if (item.none == true) {
+        if (!item.none) {
           res.push(item);
         }
-      }); //得到勾选中的商品
-      var abc = [];
-      //就相当于每遍历一次给加一个属性 当两件商品一样的时候就改变那件商品为false 所以后面得到的都是不一样的
-      for (var i = 0; i < this.arr.length; i++) {
-        let fang = true;
-        for (var j = 0; j < res.length; j++) {
-          if (this.arr[i].id == res[j].id) {
-            fang = false;
-          }
-        }
-        if (fang) {
-          abc.push(this.arr[i]);
-        }
-      }
-      this.arr = abc;
+      });
+      this.arr = res;
     },
     quan: function() {
       //点击上面还有下面的全选时候
@@ -123,6 +110,7 @@ export default {
     getNes() {
       //一开始请求数据库  拿到商品的数量
       var self = this;
+      this.$loading.open();
       $.ajax({
         url: "http://localhost:18090/l",
         type: "get",
@@ -131,6 +119,7 @@ export default {
             item.none = false;
           });
           self.arr = a;
+          self.$loading.close();
         }
       });
     }

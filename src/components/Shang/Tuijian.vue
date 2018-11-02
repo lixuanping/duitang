@@ -7,8 +7,8 @@
             <img :src="i.enter_image_url" alt="">
         </li>
       </ul>
-      <div class="hui"></div>
-      <div class="zhuan">专题</div>
+      <!-- <div class="hui"></div> -->
+      <!-- <div class="zhuan">专题</div> -->
   </div>
 </template>
 

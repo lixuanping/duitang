@@ -1,5 +1,5 @@
 <template>
-    <mu-carousel>
+  <mu-carousel>
       <mu-carousel-item v-for='i in arr' :key='i'>
 			  <img  :src="i">
 		  </mu-carousel-item>
@@ -40,7 +40,6 @@ export default {
 img {
   height: 200px;
 }
-
 .mu-carousel {
   height: 200px;
 }

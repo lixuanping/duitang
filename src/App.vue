@@ -1,28 +1,25 @@
 <template>
-	<div>
-		<router-view></router-view>
-	</div>
+  <div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 import $ from "jquery";
 export default {
-  components: {},
+  components: {
+  },
   data() {
     return {
-      
-    }
+
+    };
   },
-  computed: {
-   
-  },
-  methods: {
-  
-  },
+  computed: {},
+  methods: {},
   mounted() {
-	
+   
   }
-}
+};
 </script>
 
 <style>

@@ -5,7 +5,6 @@
     <Nav/>
     <tui />
     <!-- <zhuan/> -->
-    <Footer />
 </div>
 </template>
 
@@ -15,7 +14,6 @@ import lun from "./Lun.vue"; //引入轮播图
 import Nav from "./Nav.vue"; //引入轮播图下面的菜单
 import tui from "./Tuijian.vue"; //引入菜单下面的三种商品还有下面的一条灰色线 还有专题字样
 // import zhuan from "../Zhuanti/Zhuanti.vue"; //引入专题部分
-import Footer from "../Footer.vue"; //引入底部
 export default {
   components: {
     xheader,
@@ -23,7 +21,6 @@ export default {
     Nav,
     tui,
     // zhuan,
-    Footer
   },
   data() {
     return {};

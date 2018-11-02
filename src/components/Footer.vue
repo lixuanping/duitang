@@ -1,12 +1,13 @@
 <template>
-	<div id="box">
-		<ul>
-        <li v-for='(n,index) in tab' :key='index'  @click='toggle(index)'>
-                           <i :class="[FontSize[index],{'active':page==index}]"></i>
-            <p v-text="n" :class="{'active':page==index}"></p>
-        </li>
+  <div id="box">
+    <ul>
+      <li v-for='(n,index) in tab' :key='index' @click='toggle(index)' :idx="index" :page="page">
+        <i :class="[FontSize[index],{active:page==index}]"></i>
+        <p v-text="n" :class="{active:page==index}"></p>
+      </li>
     </ul>
-	</div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
@@ -15,7 +16,10 @@ export default {
   data() {
     //这个就相当于之前的data
     return {
-      page: "",
+      question:'',
+      page: 0,
+      // tab:[{title:'推荐',fontSize:'icon-fl-jia iconfont'},{title:'数据',fontSize:'icon-faxian iconfont'},
+      // {title:'商店',fontSize:'icon-dianpu iconfont'},{title:'我',fontSize:'icon-my iconfont'}],
       tab: ["推荐", "数据", "商店", "我"],
       FontSize: [
         "icon-fl-jia iconfont",
@@ -27,39 +31,51 @@ export default {
   },
   computed: {
     sessionStorage() {
-      //去sessionStorage拿数据
+      //去sessionStorage拿用户名数据
       return window.sessionStorage.getItem("name");
     }
   },
   methods: {
     toggle: function(index) {
+      this.page=index;
       //点击tab的时候切换到需要的页面
       if (index == 0) {
-        location.href = "#/ShouYe";
+        location.href = "#/Footer/ShouYe";
       } else if (index == 1) {
-        location.href = "#/Find";
-      } else if (index == 2) {
-        location.href = "#/ShangDian";
+        location.href = "#/Footer/faxian";
+      } else if (index == 2) {  
+        location.href = "#/Footer/shang";
       } else if (index == 3 && this.sessionStorage != null) {
         //判断是否登陆然后跳到对应的页面
-        location.href = "#/Me";
+        location.href = "#/Footer/Me";
       } else {
-        location.href = "#/Xuan";
+        location.href = "#/Footer/Xuan";
       }
     }
   },
-  mounted() {
-    //让底部的颜色跟着跳过去
-    if (this.$route.path == "/ShouYe") {
-      this.page = 0;
-    } else if (this.$route.path == "/Find") {
-      this.page = 1;
-    } else if (this.$route.path == "/ShangDian") {
-      this.page = 2;
-    } else if (this.$route.path == "/Xuan") {
-      this.page = 3;
-    } else if (this.$route.path == "/Me") {
-      this.page = 3;
+  watch: {//监听的意思
+    $route(){
+      console.log(this.$route.path)
+    }
+    // 如果 `question` 发生改变，这个函数就会运行
+    // question: function (newQuestion, oldQuestion) {
+    //   console.log(222)
+    // }
+  },
+  mounted(){//为了刷新页面的时候  下面的颜色在当前页面
+    switch(this.$route.path){
+      case '/Footer/ShouYe':
+      this.page=0
+      break;
+      case '/Footer/faxian':
+      this.page=1
+      break;
+      case '/Footer/shang':
+      this.page=2
+      break;
+      case '/Footer/Me':
+      this.page=3
+      break;
     }
   }
 };

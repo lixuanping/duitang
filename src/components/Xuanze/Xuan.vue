@@ -3,28 +3,33 @@
     <div id="box">
         <span class="duitang">堆糖</span>
         <p>轻松注册,即可永久保存你的所爱换了手机也能找的到哦</p>
-        <button v-for='(i,index) in arr' v-text='i' @click.prevent="xuan(index)" :key='index' 
-        ></button> 
+        <button v-for='(i,index) in arr' v-text='i.title' :key='index' @click="xuan(index)"></button>
+       
+        <!-- <router-link v-for='(i,index) in arr' v-text='i.title' :to="i.link"  :key='index'  tag="button"> -->
+        <!-- </router-link> -->
+        <!-- <router-link to="/Xuan/Regest" tag="button" >注册</router-link> -->
+        <!-- <router-link to="/Xuan/Login" tag="button" >登陆</router-link> -->
     </div>
-    <Footer/>
 </div>
 </template>
 
 <script>
-import Footer from "../Footer.vue"; //引入底部
 export default {
   components: {
-    Footer
   },
   data() {
     return {
-      arr: ["注册", "登陆"],
+      arr: [{title:"注册",link:'/Xuan/Regest',name:'Regest'},{title:"登陆",link:'/Xuan/Login',name:'Login'}],
       page: 0
     };
   },
   methods: {
     xuan: function(index) {
+      // console.log(this.arr[index].link)
       //点击注册或登陆的时候
+      // this.$router.push(this.arr[index].link)
+      // this.$router.push({ name: this.arr[index].name})
+      // this.$router.push({ path: this.arr[index].link})
       switch (index) {
         case 0:
           location.href = "#/Regest";

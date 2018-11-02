@@ -7,7 +7,6 @@
               <span class="zong" v-show='zong>0' v-text='zong'></span>
             </div>
         </header>
-        <div></div>
         <mt-swipe :auto="0">
           <mt-swipe-item v-for='i in res'>
             <img :src="i.picture" alt="">
@@ -63,6 +62,7 @@ import Mint from "mint-ui";
 import "mint-ui/lib/style.css";
 Vue.use(Mint);
 import $ from "jquery";
+
 export default {
   components: {
 
@@ -88,7 +88,10 @@ export default {
     },
     //点击上边的X回到列表页
     tui: function() {
-      location.href = "#/Find";
+      location.href = "#/Footer/faxian";
+      // $(window).scrollTop(this.scrollY);
+      $(window).scrollTop(1000);
+
     },
     add: function() {
       //点击加的时候
@@ -106,6 +109,7 @@ export default {
       var a =Number(this.num);
       var b = Number(this.qty);
       this.totel = (b+=a)
+      
       $.ajax({
         url: "http://localhost:18090/k",
         type: "get",
@@ -117,12 +121,13 @@ export default {
           qty: this.totel
         },
         success(a) {
-          
+
         }
       });
     },
     getNews(){//一开始获取到购物车所有的商品
       var self = this
+      this.$loading.open();
       $.ajax({
         url: "http://localhost:18090/l",
         type: "get",
@@ -145,6 +150,7 @@ export default {
           for (var i = 0; i <a.length; i++) {
             self.zong+=Number(a[i].qty)
           }
+          self.$loading.close();
         }
       });
     }
@@ -154,7 +160,6 @@ export default {
     this.arr = JSON.parse(this.sessionStorage);
     this.res = this.arr.carousel_pictures;
     this.getNews()//一开始发起请求
-   
   }
 };
 </script>

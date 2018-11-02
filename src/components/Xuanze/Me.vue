@@ -23,15 +23,12 @@
               <li v-for='n in ding' :key='n' v-text='n'></li>
             </ul>
         </div>
-        <Footer /> 
     </div>
 </template>
 
 <script>
-import Footer from "../Footer.vue"; //引入底部
 export default {
   components: {
-    Footer
   },
   data() {
     return {
@@ -45,7 +42,7 @@ export default {
     //点击退出的时候
     tui: function() {
       window.sessionStorage.removeItem("name");
-      location.href = "#/Xuan";
+      location.href = "#/Footer/Xuan";
     }
   },
   computed: {
@@ -54,7 +51,7 @@ export default {
       return window.sessionStorage.getItem("name");
     }
   },
-  mounted() {
+  mounted() { 
     var yi = this.sessionStorage.slice(0, 3); //得到前三位
     var er = this.sessionStorage.slice(-4); //得到后四位
     this.name = yi + "****" + er;

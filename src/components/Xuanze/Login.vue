@@ -4,12 +4,14 @@
       <span @click="toggle">X</span>
     </header>
     <form @submit.prevent>
-      <input type="text" placeholder="请输入手机号码" id='username' v-model='user'><br>
+      <input type="text" placeholder="请输入手机号码" id='username' v-model='user' v-focus><br>
       <input type="password" placeholder="请输入密码" id='password' v-model='pass'><br>
       <button @click="reg">登陆</button>
     </form>
+    <router-view></router-view>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -18,10 +20,18 @@ export default {
       pass: ""
     };
   },
+  directives: {
+    //自定义指令  一开始让输入框获得焦点
+    focus: {
+      inserted(el) {
+        el.focus();
+      }
+    }
+  },
   methods: {
     toggle: function() {
       //点击顶部的X回到注册登陆页面
-      location.href = "#/Xuan";
+      location.href = "#/Footer/Xuan";
     },
     reg: function() {
       //点击登陆的时候以手机号来注册
@@ -59,12 +69,11 @@ export default {
 <style scoped>
 /* 登陆页面 */
 #box {
-  height: 6.7rem;
+  height: 6.66rem;
   background: url("../../images/dd.jpg") 100% 100%;
   background-position: center center;
   background-size: cover;
-  /* background: #fff; */
-  /* background: transparent; */
+  padding: 0;
 }
 /* 登陆页面头部 */
 header {
@@ -73,7 +82,7 @@ header {
   height: 0.5rem;
 }
 header span {
-  display: inline-block;
+  float: left;
   height: 0.5rem;
   width: 0.3rem;
   text-align: center;
@@ -104,7 +113,6 @@ header span {
 /* 表单部分 */
 form {
   width: 100%;
-  text-align: center;
   padding-top: 1.8rem;
   padding-left: 0.2rem;
   padding-right: 0.2rem;

@@ -43,6 +43,7 @@ export default {
   methods: {
     getNews() {
       var self = this; //this指向不一样
+      this.$loading.open();
       $.ajax({
         //通过后端拿这个用户的其他动态
         url: "http://localhost:18090/f",
@@ -53,6 +54,7 @@ export default {
         },
         success(a) {
           self.res = a.data.object_list; //得到一个数组 里面四条动态信息的参数
+          self.$loading.close();
         }
       });
     }
