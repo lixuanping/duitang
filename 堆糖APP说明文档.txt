@@ -1,0 +1,13 @@
+ShouYe文件夹里面放的是底部 推荐 的组件 其中ShouYe.vue为父组件  其余的为子组件
+Xuanze文件夹里面放的是点击底部 我 板块的页面  还有点击注册登陆的页面  
+还有登陆注册以后去到个人信息的页面
+
+Shagn文件夹里面放的是底部 商店板块 ShangDia是父组件  其余的为子组件 
+下面的专题分开在Zhuanti文件夹里面写
+
+
+Zhuanti文件夹放的是商店专题板块  Zhuanti为父组件 其余的为子组件
+
+Find里面放的是底部发现页面的  没写东西
+
+https://buy.duitang.com/buy/youliao/?from=mdt_home

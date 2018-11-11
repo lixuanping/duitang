@@ -1,39 +1,46 @@
 <template>
-  <div id="box">
-    <mu-paper :z-depth="1" class="demo-loadmore-wrap">
-      <mu-container ref="container" class="demo-loadmore-content">
-        <mu-load-more  :loading="loading" @load="load">
-            <li v-for='(i,index) in arr' @click="xiang(index)" :key='index' v-lazy="i">
-                <img :src="i.photo.path" alt="" class="datu">
-                <h4 v-text='i.msg' class="miao"></h4>
-                <p><i class="icon-xingxing iconfont"></i><span v-text='i.favorite_count'></span></p>
-                <div class="fuji">
-                  <img :src="i.sender.avatar" alt="" class="touxiang">
-                  <a v-text='i.sender.username'></a><span class="shouji" v-text="'收集到 '+i.album.name"></span>
-                </div>  
-            </li>
-          </mu-load-more>
-        </mu-container>
-      </mu-paper>
-  </div>
+    <div id="box">
+        <!-- 下面三层是下拉加载需要标签 -->
+        <mu-paper :z-depth="1" class="demo-loadmore-wrap">
+            <mu-container ref="container" class="demo-loadmore-content">
+                <mu-load-more :loading="loading" @load="load">
+                    <!-- 下面这层是上拉刷新需要标签 -->
+                    <mt-loadmore :top-method="loadTop" ref="loadmore">
+                        <li v-for='(i,index) in arr' @click="xiang(index)" :key='index'>
+                            <!-- 图片是懒加载v-lazy= -->
+                            <img v-lazy="i.photo.path" :src="i.photo.path" alt="" class="datu">
+                            <!-- <img v-lazy="i.photo.path" class="datu"> -->
+                            <h4 v-text='i.msg' class="miao"></h4>
+                            <p><i class="icon-xingxing iconfont"></i><span v-text='i.favorite_count'></span></p>
+                            <div class="fuji">
+                                <img :src="i.sender.avatar" alt="" class="touxiang">
+                                <a v-text='i.sender.username'></a><span class="shouji" v-text="'收集到 '+i.album.name"></span>
+                            </div>
+                        </li>
+                    </mt-loadmore>
+
+                </mu-load-more>
+            </mu-container>
+        </mu-paper>
+    </div>
 </template>
 
 <script>
+//把数据存到sessionStorage  防止一回来就自动请求刷新页面
 import $ from "jquery";
-
 export default {
   data() {
     return {
       arr: [],
-      refreshing: false,
-      loading: false
+      loading: false,//下拉加载更多需要
+      page:0//下拉加载更多发过去的参数 
     };
   },
   methods: {
     getNews() {
       //一开始发起请求渲染到页面
       var self = this;
-      this.$loading.open();
+      this.$loading.open(); //切换的时候有加载中字样
       $.ajax({
         url: "http://localhost:18090/b",
         type: "get",
@@ -43,11 +50,21 @@ export default {
               self.arr = a;
             }
           }
-          self.$loading.close();
+          self.$loading.close(); //关闭加载中字样
+          // 写入sessionStorage  防止一回来就自动请求刷新页面
+          var obj = JSON.stringify(a);
+          sessionStorage.setItem("goodslist", obj);
         }
       });
     },
+    loadTop() {
+      //上拉刷新  删除sessionStorage旧的数据 渲染新的数据
+      this.$refs.loadmore.onTopLoaded();
+      sessionStorage.removeItem("goodslist");
+      this.getNews();
+    },
     load() {
+      this.page+=24
       //鼠标滚动到底部的时候加载再发起请求加载数据
       this.loading = true;
       setTimeout(() => {
@@ -57,7 +74,7 @@ export default {
           url: "http://localhost:18090/c",
           type: "get",
           data: {
-            start: 0
+            start: this.page
           },
           success(a) {
             for (var i = 0; i < a.length; i++) {
@@ -76,7 +93,13 @@ export default {
     }
   },
   mounted() {
-    this.getNews();
+    // 判断sessionStorage有数据就用旧的  没有就发起请求  防止一回来就自动请求刷新页面
+    var obj = JSON.parse(sessionStorage.getItem("goodslist"));
+    if (obj) {
+      this.arr = obj;
+    } else {
+      this.getNews();
+    }
   }
 };
 </script>
@@ -104,7 +127,7 @@ export default {
   text-overflow: ellipsis;
 }
 /* 大图 */
-.datu {
+.datu{
   width: 1.65rem;
   height: 2.4rem;
 }

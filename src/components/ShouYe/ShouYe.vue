@@ -11,7 +11,6 @@
       </header>
     <lun />
     <Nei />
-    <router-view></router-view>
   </div>
 </template>
 

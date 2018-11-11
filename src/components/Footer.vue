@@ -40,40 +40,34 @@ export default {
       this.page=index;
       //点击tab的时候切换到需要的页面
       if (index == 0) {
-        location.href = "#/Footer/ShouYe";
+        location.href = "#/ShouYe";
       } else if (index == 1) {
-        location.href = "#/Footer/faxian";
+        location.href = "#/faxian";
       } else if (index == 2) {  
-        location.href = "#/Footer/shang";
+        location.href = "#/shang";
       } else if (index == 3 && this.sessionStorage != null) {
         //判断是否登陆然后跳到对应的页面
-        location.href = "#/Footer/Me";
+        location.href = "#/Me";
       } else {
-        location.href = "#/Footer/Xuan";
+        location.href = "#/Xuan";
       }
     }
   },
-  watch: {//监听的意思
-    $route(){
-      console.log(this.$route.path)
-    }
-    // 如果 `question` 发生改变，这个函数就会运行
-    // question: function (newQuestion, oldQuestion) {
-    //   console.log(222)
-    // }
-  },
   mounted(){//为了刷新页面的时候  下面的颜色在当前页面
     switch(this.$route.path){
-      case '/Footer/ShouYe':
+      case '/ShouYe':
       this.page=0
       break;
-      case '/Footer/faxian':
+      case '/faxian':
       this.page=1
       break;
-      case '/Footer/shang':
+      case '/shang':
       this.page=2
       break;
-      case '/Footer/Me':
+      case '/Xuan':
+      this.page=3
+      break;
+      case '/Me':
       this.page=3
       break;
     }

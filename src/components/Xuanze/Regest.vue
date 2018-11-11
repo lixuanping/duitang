@@ -23,7 +23,7 @@ export default {
   methods: {
     toggle: function() {
       //点击顶部的X回到注册登陆页面
-      location.href = "#/Footer/Xuan";
+      location.href = "#/Xuan";
     },
     reg: function() {
       //点击注册的时候以手机号来注册

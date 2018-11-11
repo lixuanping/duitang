@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+Vue.config.productionTip = false
+
 import $ from 'jquery';
 window.$ = $;
 
@@ -9,17 +11,20 @@ import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 Vue.use(MuseUI);
 
-Vue.config.productionTip = false
-
-//因为需要用到路由 所以需要这两步  
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
 
 import rem from './js/rem.js'//引入rem
 rem()//使用rem
 
+// 加载中字样
 import { Indicator } from 'mint-ui'
 Vue.prototype.$loading = Indicator
+// 上拉刷新
+import { Loadmore } from 'mint-ui';
+Vue.component(Loadmore.name, Loadmore);
+
+// 图片懒加载
+import { Lazyload } from 'mint-ui';
+Vue.use(Lazyload);
 
 
 import shouye from './components/ShouYe/ShouYe.vue'//引入首页
@@ -40,19 +45,44 @@ import car from './components/Find/Car.vue'//引入底部数据板块的详情�
 
 import Footer from './components/Footer.vue'//引入底部
 
+// import wheader from './weibo/Wheader.vue'
+// import content from './weibo/Content.vue'
+
+
+//因为需要用到路由 所以需要这两步  
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
 //定义路由  ......2
 const routes = [
+	// {
+	// 	path: '/',
+	// 	component: wheader,
+	// 		children: [
+	// 		{
+	// 			path: 'aaa:id',
+	// 			name:'a',
+	// 			component: content
+	// 		},
+	// 		{
+	// 			path: '/bbb:id',
+	// 			name:'b',
+	// 			component: content
+	// 		},
+	// 		{
+	// 			path: '/ccc:id',
+	// 			name:'c',
+	// 			component: content
+	// 		}
+	// 	]
+	// }
 	{
-		path: '/', //默认页面
-		redirect: '/Footer/'
-	},
-	{
-		path: '/Footer',
+		path: '/',
 		component: Footer,
 		children: [
 			{
 				path: '',
-				redirect: '/Footer/shouye'
+				redirect: '/shouye'
 			},
 			{
 				path: 'shouye',
@@ -93,7 +123,6 @@ const routes = [
 		path: '/Me',//个人信息页面
 		component: me
 	},
-	
 	{
 		path: '/Fxiang',//点击底部数据板块的详情页
 		component: Fxiang

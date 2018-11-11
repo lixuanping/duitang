@@ -55,8 +55,7 @@ export default {
       return this.$store.getters.getSearchText;
     },
     computedNews() {
-      var newArr = this.arr.filter(
-        function(item) {
+      var newArr = this.arr.filter(function(item) {
           return item.inventory_caption.indexOf(this.aa) != -1;
         }.bind(this)
       );

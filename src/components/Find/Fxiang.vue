@@ -88,7 +88,7 @@ export default {
     },
     //点击上边的X回到列表页
     tui: function() {
-      location.href = "#/Footer/faxian";
+      location.href = "#/faxian";
       // $(window).scrollTop(this.scrollY);
       $(window).scrollTop(1000);
 

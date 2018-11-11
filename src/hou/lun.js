@@ -63,7 +63,6 @@ app.get('/b', function (req, res) {
 // 首页点击加载更多的路由
 app.get('/c', function (req, res) {
     var num = req.query.start//前端传过来的东西
-    num+=24
     request("https://www.duitang.com/napi/index/hot/?start="+num+"&limit=24&include_fields=sende", (err, a, body) => {
         if(err){
             console.log('!!!!!!!!!!!!!!!!');
