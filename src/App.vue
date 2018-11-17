@@ -7,17 +7,14 @@
 <script>
 import $ from "jquery";
 export default {
-  components: {
-  },
+  components: {},
   data() {
-    return {
-
-    };
+    return {};
   },
   computed: {},
   methods: {},
   mounted() {
-   
+
   }
 };
 </script>

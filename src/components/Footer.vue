@@ -6,7 +6,10 @@
         <p v-text="n" :class="{active:page==index}"></p>
       </li>
     </ul>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -16,7 +19,7 @@ export default {
   data() {
     //这个就相当于之前的data
     return {
-      question:'',
+      question: "",
       page: 0,
       // tab:[{title:'推荐',fontSize:'icon-fl-jia iconfont'},{title:'数据',fontSize:'icon-faxian iconfont'},
       // {title:'商店',fontSize:'icon-dianpu iconfont'},{title:'我',fontSize:'icon-my iconfont'}],
@@ -37,13 +40,13 @@ export default {
   },
   methods: {
     toggle: function(index) {
-      this.page=index;
+      this.page = index;
       //点击tab的时候切换到需要的页面
       if (index == 0) {
         location.href = "#/ShouYe";
       } else if (index == 1) {
         location.href = "#/faxian";
-      } else if (index == 2) {  
+      } else if (index == 2) {
         location.href = "#/shang";
       } else if (index == 3 && this.sessionStorage != null) {
         //判断是否登陆然后跳到对应的页面
@@ -53,23 +56,24 @@ export default {
       }
     }
   },
-  mounted(){//为了刷新页面的时候  下面的颜色在当前页面
-    switch(this.$route.path){
-      case '/ShouYe':
-      this.page=0
-      break;
-      case '/faxian':
-      this.page=1
-      break;
-      case '/shang':
-      this.page=2
-      break;
-      case '/Xuan':
-      this.page=3
-      break;
-      case '/Me':
-      this.page=3
-      break;
+  mounted() {
+    //为了刷新页面的时候  下面的颜色在当前页面
+    switch (this.$route.path) {
+      case "/ShouYe":
+        this.page = 0;
+        break;
+      case "/faxian":
+        this.page = 1;
+        break;
+      case "/shang":
+        this.page = 2;
+        break;
+      case "/Xuan":
+        this.page = 3;
+        break;
+      case "/Me":
+        this.page = 3;
+        break;
     }
   }
 };

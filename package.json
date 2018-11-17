@@ -21,7 +21,8 @@
     "babel-plugin-import": "^1.10.0",
     "node-sass": "^4.9.4",
     "vue-router": "^3.0.1",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.5.17",
+    "vue-waterfall-easy": "^2.4.3"
   },
   "eslintConfig": {
     "root": true,

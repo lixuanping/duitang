@@ -87,7 +87,7 @@ export default {
 /* 大图 */
 #box .datu {
   width: 100%;
-  height: 3.9rem;
+  /* height: 3.9rem; */
 }
 hr {
   margin: 0.07rem 0;

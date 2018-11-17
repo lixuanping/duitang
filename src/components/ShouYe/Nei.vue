@@ -1,45 +1,66 @@
 <template>
-    <div id="box">
-        <!-- 下面三层是下拉加载需要标签 -->
-        <mu-paper :z-depth="1" class="demo-loadmore-wrap">
-            <mu-container ref="container" class="demo-loadmore-content">
-                <mu-load-more :loading="loading" @load="load">
-                    <!-- 下面这层是上拉刷新需要标签 -->
-                    <mt-loadmore :top-method="loadTop" ref="loadmore">
-                        <li v-for='(i,index) in arr' @click="xiang(index)" :key='index'>
-                            <!-- 图片是懒加载v-lazy= -->
-                            <img v-lazy="i.photo.path" :src="i.photo.path" alt="" class="datu">
-                            <!-- <img v-lazy="i.photo.path" class="datu"> -->
-                            <h4 v-text='i.msg' class="miao"></h4>
-                            <p><i class="icon-xingxing iconfont"></i><span v-text='i.favorite_count'></span></p>
-                            <div class="fuji">
-                                <img :src="i.sender.avatar" alt="" class="touxiang">
-                                <a v-text='i.sender.username'></a><span class="shouji" v-text="'收集到 '+i.album.name"></span>
-                            </div>
-                        </li>
-                    </mt-loadmore>
+  <!-- 下面三层是下拉加载需要标签 -->
+  <mu-paper :z-depth="1" class="demo-loadmore-wrap">
+    <mu-container ref="container" class="demo-loadmore-content">
+      <mu-load-more :loading="loading" @load="load">
+        <!-- 下面这层是上拉刷新 -->
+        <mt-loadmore :top-method="loadTop" ref="loadmore">
 
-                </mu-load-more>
-            </mu-container>
-        </mu-paper>
-    </div>
+          <div id="vm" class="pubu" v-cloak>
+            <!-- 左边盒子 -->
+            <ul id="show" class="yg yg_l">
+              <li v-for="(item,index) in showwz" v-if="index%2==0" :key='index' @click="xiang(index)">
+                <div style="position: relative;">
+                  <img :src="item.photo.path" alt="">
+                  <!-- <img v-lazy="item.photo.path" :src="item.photo.path"> -->
+                  <h4 v-text='item.msg'></h4>
+                  <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
+                  <div class="fuji">
+                    <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;
+             position: absolute; top: 0.02rem;' />
+                    <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <!-- 右边盒子 -->
+            <ul class="yg yg_r">
+              <li v-for="(item,index) in showwz" v-if="index%2==1" :key='index' @click="xiang(index)">
+                <div style="position: relative;">
+                  <img :src="item.photo.path" alt="">
+                  <!-- <img v-lazy="item.photo.path" :src="item.photo.path"> -->
+                  <h4 v-text='item.msg' class="miao"></h4>
+                  <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
+                  <div class="fuji">
+                    <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;position: absolute; top: 0.02rem;'>
+                    <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <div style="clear: both;"></div>
+          </div>
+
+        </mt-loadmore>
+
+      </mu-load-more>
+    </mu-container>
+  </mu-paper>
 </template>
 
 <script>
-//把数据存到sessionStorage  防止一回来就自动请求刷新页面
 import $ from "jquery";
 export default {
   data() {
     return {
-      arr: [],
-      loading: false,//下拉加载更多需要
-      page:0//下拉加载更多发过去的参数 
+      showwz: [],
+      loading: false, //下拉加载更多需要
+      page: 0 //下拉加载更多发过去的参数
     };
   },
   methods: {
-    getNews() {
-      //一开始发起请求渲染到页面
-      var self = this;
+    getwz: function() {
+      var that = this;
       this.$loading.open(); //切换的时候有加载中字样
       $.ajax({
         url: "http://localhost:18090/b",
@@ -47,25 +68,21 @@ export default {
         success(a) {
           for (var i = 0; i < a.length; i++) {
             if (a[i].photo.path) {
-              self.arr = a;
+              that.showwz = a;
             }
           }
-          self.$loading.close(); //关闭加载中字样
-          // 写入sessionStorage  防止一回来就自动请求刷新页面
-          var obj = JSON.stringify(a);
-          sessionStorage.setItem("goodslist", obj);
+          that.$loading.close(); //关闭加载中字样
         }
       });
     },
     loadTop() {
-      //上拉刷新  删除sessionStorage旧的数据 渲染新的数据
+      //上拉刷新
       this.$refs.loadmore.onTopLoaded();
-      sessionStorage.removeItem("goodslist");
-      this.getNews();
+      this.getwz();
     },
     load() {
-      this.page+=24
       //鼠标滚动到底部的时候加载再发起请求加载数据
+      this.page += 24;
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
@@ -78,7 +95,7 @@ export default {
           },
           success(a) {
             for (var i = 0; i < a.length; i++) {
-              self.arr = self.arr.concat(a[i]);
+              self.showwz = self.showwz.concat(a[i]);
             }
           }
         });
@@ -86,66 +103,61 @@ export default {
     },
     xiang: function(index) {
       //点击跳转到详情页  并且把对应的信息存在sessionStorage 然后在详情页才能获取到信息
-      var obj = JSON.stringify(this.arr[index]);
+      var obj = JSON.stringify(this.showwz[index]);
       window.sessionStorage.setItem("list", obj);
       location.href = "#/Sxiang";
       $(window).scrollTop(0);
     }
   },
-  mounted() {
-    // 判断sessionStorage有数据就用旧的  没有就发起请求  防止一回来就自动请求刷新页面
-    var obj = JSON.parse(sessionStorage.getItem("goodslist"));
-    if (obj) {
-      this.arr = obj;
-    } else {
-      this.getNews();
-    }
+  mounted: function() {
+    this.getwz();
   }
 };
 </script>
 
 <style  scoped>
-.demo-loadmore-wrap {
-  width: 100%;
+* {
+  padding: 0;
+  margin: 0;
+}
+/* 大盒子 */
+.pubu {
   background: #eee;
-  border: 0.01rem solid #ccc;
-  margin-bottom: 0.5rem;
+  padding: 0 0.1rem;
 }
-.demo-loadmore-wrap li {
-  box-shadow: 0.02rem 0.02rem 0.02rem #ccc;
+/* 左右盒子 */
+.yg_l {
   float: left;
-  list-style: none;
-  width: 1.65rem;
-  margin-top: 0.2rem;
-  margin-left: 0.1rem;
 }
-/* 描述 */
-.miao {
-  width: 45%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.yg_r {
+  float: right;
+}
+.yg_l,
+.yg_r {
+  width: calc(50% - 8px);
+}
+/* li样式 */
+.yg li {
+  list-style-type: none;
+  background: #fff;
+  border-radius: 0.08rem;
+  margin-bottom: 0.1rem;
+  margin-top: 0.2rem;
+  box-shadow: 3px 3px 3px skyblue, 3px -3px 3px skyblue, -3px 3px 3px skyblue,
+    -3px -3px 3px skyblue;
 }
 /* 大图 */
-.datu{
-  width: 1.65rem;
-  height: 2.4rem;
+.yg img {
+  width: 100%;
+  border-radius: 0.08rem 0.08rem 0 0;
 }
+/* 星星 */
 .icon-xingxing {
   margin-right: 0.05rem;
   color: #aaa;
 }
-/* 装头像还有收集地址的盒子 */
 .fuji {
   position: relative;
-}
-/* 头像 */
-.touxiang {
-  position: absolute;
-  top: 0.02rem;
-  width: 0.2rem;
-  height: 0.2rem;
-  border-radius: 50%;
 }
 /* 收集 */
 a,
@@ -153,7 +165,7 @@ a,
   display: inline-block;
   width: 90%;
   padding-left: 16%;
-  color: blue;
+  color: skyblue;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

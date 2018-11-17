@@ -86,11 +86,15 @@ const routes = [
 			},
 			{
 				path: 'shouye',
-				component: shouye//这个名字是引入名字 上面path要跟这个一样
+				component: shouye,//这个名字是引入名字 上面path要跟这个一样
+				meta:{
+					keepAlive:true
+				}
 			},
 			{
 				path: 'faxian',
 				component: faxian
+				
 			},
 			{
 				path: 'shang',
