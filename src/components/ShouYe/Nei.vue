@@ -1,129 +1,155 @@
 <template>
-  <!-- 下面三层是下拉加载需要标签 -->
-  <mu-paper :z-depth="1" class="demo-loadmore-wrap">
-    <mu-container ref="container" class="demo-loadmore-content">
-      <mu-load-more :loading="loading" @load="load">
-        <!-- 下面这层是上拉刷新 -->
-        <mt-loadmore :top-method="loadTop" ref="loadmore">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
 
-          <div id="vm" class="pubu" v-cloak>
-            <!-- 左边盒子 -->
-            <ul id="show" class="yg yg_l">
-              <li v-for="(item,index) in showwz" v-if="index%2==0" :key='index' @click="xiang(index)">
-                <div style="position: relative;">
-                  <img :src="item.photo.path" alt="">
-                  <!-- <img v-lazy="item.photo.path" :src="item.photo.path"> -->
-                  <h4 v-text='item.msg'></h4>
-                  <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
-                  <div class="fuji">
-                    <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;
+            <div id="vm" class="pubu" v-cloak>
+                <ul id="show" class="yg yg_l">
+                    <li v-for="(item,index) in list" v-if="index%2==0" :key='index' @click="xiang(index)">
+                        <div style="position: relative;">
+                            <!-- <img :src="item.photo.path" alt=""> -->
+                            <img v-lazy="item.photo.path" :src="item.photo.path" class="datu">
+                            <h4 v-text='item.msg'></h4>
+                            <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
+                            <div class="fuji">
+                                <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;
              position: absolute; top: 0.02rem;' />
-                    <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <!-- 右边盒子 -->
-            <ul class="yg yg_r">
-              <li v-for="(item,index) in showwz" v-if="index%2==1" :key='index' @click="xiang(index)">
-                <div style="position: relative;">
-                  <img :src="item.photo.path" alt="">
-                  <!-- <img v-lazy="item.photo.path" :src="item.photo.path"> -->
-                  <h4 v-text='item.msg' class="miao"></h4>
-                  <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
-                  <div class="fuji">
-                    <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;position: absolute; top: 0.02rem;'>
-                    <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div style="clear: both;"></div>
-          </div>
+                                <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <!-- 右边盒子 -->
+                <ul class="yg yg_r">
+                    <li v-for="(item,index) in list" v-if="index%2==1" :key='index' @click="xiang(index)">
+                        <div style="position: relative;">
+                            <!-- <img :src="item.photo.path" alt=""> -->
+                            <img v-lazy="item.photo.path" :src="item.photo.path" class="datu">
+                            <h4 v-text='item.msg' class="miao"></h4>
+                            <p><i class="icon-xingxing iconfont"></i><span v-text='item.favorite_count'></span></p>
+                            <div class="fuji">
+                                <img :src="item.sender.avatar" alt="" style='width:0.2rem;height:0.2rem;border-radius: 50%;position: absolute; top: 0.02rem;'>
+                                <a v-text='item.sender.username'></a><span class="shouji" v-text="'收集到 '+item.album.name"></span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div style="clear: both;"></div>
+            </div>
 
+            <!-- 上拉和下拉的隐藏样式 -->
+            <!-- <div slot="top" class="mint-loadmore-top">
+                <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">❤</span>
+                <span v-show="topStatus === 'loading'">
+                    <mt-spinner type="snake"></mt-spinner>
+                </span>
+            </div> -->
+            <div slot="bottom" class="mint-loadmore-bottom">
+                <span v-show="bottomStatus !== 'loading'" :class="{ 'is-rotate': bottomStatus === 'drop' }">↑</span>
+                <span v-show="bottomStatus === 'loading'">
+                    <mt-spinner type="snake"></mt-spinner>
+                </span>
+                <!-- <span v-show="allLoaded == true">加载完成没有更多数据</span> -->
+            </div>
         </mt-loadmore>
-
-      </mu-load-more>
-    </mu-container>
-  </mu-paper>
+    </div>
 </template>
-
-<script>
-import $ from "jquery";
+<script type="text/babel">
 export default {
   data() {
     return {
-      showwz: [],
-      loading: false, //下拉加载更多需要
-      page: 0 //下拉加载更多发过去的参数
+      list: [],
+      allLoaded: false,
+      bottomStatus: "",
+      wrapperHeight: 0,
+      topStatus: ""
     };
   },
+
   methods: {
-    getwz: function() {
-      var that = this;
-      this.$loading.open(); //切换的时候有加载中字样
+    handleBottomChange(status) {
+      this.bottomStatus = status;
+    },
+    handleTopChange(status) {
+      this.topStatus = status;
+    },
+    loadBottom() {
+      var self = this;
       $.ajax({
         url: "http://localhost:18090/b",
         type: "get",
         success(a) {
           for (var i = 0; i < a.length; i++) {
             if (a[i].photo.path) {
-              that.showwz = a;
+              self.list = self.list.concat(a[i]);
             }
           }
-          that.$loading.close(); //关闭加载中字样
+          self.$loading.close(); //关闭加载中字样
         }
       });
+      setTimeout(() => {
+        self.$refs.loadmore.onBottomLoaded();
+      }, 3000);
     },
     loadTop() {
-      //上拉刷新
       this.$refs.loadmore.onTopLoaded();
-      this.getwz();
-    },
-    load() {
-      //鼠标滚动到底部的时候加载再发起请求加载数据
-      this.page += 24;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        var self = this;
-        $.ajax({
-          url: "http://localhost:18090/c",
-          type: "get",
-          data: {
-            start: this.page
-          },
-          success(a) {
-            for (var i = 0; i < a.length; i++) {
-              self.showwz = self.showwz.concat(a[i]);
+      var that = this;
+      $.ajax({
+        url: "http://localhost:18090/b",
+        type: "get",
+        success(a) {
+          for (var i = 0; i < a.length; i++) {
+            if (a[i].photo.path) {
+              that.list = a;
             }
           }
-        });
-      }, 1000);
-    },
-    xiang: function(index) {
-      //点击跳转到详情页  并且把对应的信息存在sessionStorage 然后在详情页才能获取到信息
-      var obj = JSON.stringify(this.showwz[index]);
-      window.sessionStorage.setItem("list", obj);
-      location.href = "#/Sxiang";
-      $(window).scrollTop(0);
+        }
+      });
     }
   },
-  mounted: function() {
-    this.getwz();
+  mounted() {
+    this.wrapperHeight =
+      document.documentElement.clientHeight -
+      this.$refs.wrapper.getBoundingClientRect().top;
   }
 };
 </script>
+<style>
 
-<style  scoped>
-* {
-  padding: 0;
-  margin: 0;
+.loading-background,
+.mint-loadmore-top span {
+  -webkit-transition: 0.2s linear;
+  transition: 0.2s linear;
 }
-/* 大盒子 */
+
+.mint-loadmore-top span.is-rotate {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+/* 不加这句就是全局部滚动 (上拉事件就会失效)*/
+.page-loadmore-wrapper {
+  overflow: scroll;
+  padding-bottom:.5rem;
+}
+
+.mint-loadmore-bottom span {
+  display: inline-block;
+  -webkit-transition: 0.2s linear;
+  transition: 0.2s linear;
+  vertical-align: middle;
+}
+
+.mint-loadmore-bottom span.is-rotate {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+/* 样式 */
 .pubu {
   background: #eee;
   padding: 0 0.1rem;
+}
+.container {
+  max-width: 100%;
 }
 /* 左右盒子 */
 .yg_l {
@@ -147,7 +173,7 @@ export default {
     -3px -3px 3px skyblue;
 }
 /* 大图 */
-.yg img {
+.datu {
   width: 100%;
   border-radius: 0.08rem 0.08rem 0 0;
 }
@@ -174,3 +200,4 @@ a,
   color: #000;
 }
 </style>
+ 

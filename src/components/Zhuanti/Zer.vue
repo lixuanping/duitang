@@ -8,9 +8,9 @@
         </div>
     </div>
     <!-- 下面的可拖拽部分 -->
-    <!-- <div class="swiper-container">
+    <div class="swiper-container">
         <ul class="swiper-wrapper">
-            <li class="swiper-slide" v-for='i in res'>
+            <li class="swiper-slide" v-for='i in res' :key='i'>
                 <img :src="i.pictures[1]" alt="">
                 <p v-text='i.inventory_caption' class="username"></p>
                 <p>
@@ -18,14 +18,14 @@
                 </p>
             </li>
         </ul>
-    </div> -->
+    </div>
 </div>
    
 </template>
   
 <script>
 import $ from "jquery";
-// import Swiper from "swiper"; //引入swiper js
+import Swiper from "swiper"; //引入swiper js
 // import "../../css/swiper.min.css"; //引入swiper css
 
 export default {
@@ -53,12 +53,12 @@ export default {
   mounted() {
     //用created也会报错 但是不影响画面生成
     this.getNews();
-    // var swiper = new Swiper(".swiper-container", {
-    //   slidesPerView: 3,
-    //   spaceBetween: 10,
-    //   observer: true, // 修改swiper自己或子元素时,自动初始化swiper
-    //   observeParents: true // 修改swiper的父元素时,自动初始化swiper
-    // });
+    var swiper = new Swiper(".swiper-container", {
+      slidesPerView: 3,
+      spaceBetween: 10,
+      observer: true, // 修改swiper自己或子元素时,自动初始化swiper
+      observeParents: true // 修改swiper的父元素时,自动初始化swiper
+    });
   }
 };
 </script>
