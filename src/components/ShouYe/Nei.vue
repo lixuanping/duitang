@@ -1,4 +1,5 @@
 <template>
+
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
         <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" ref="loadmore">
 
@@ -125,10 +126,12 @@ export default {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
 }
-/* 不加这句就是全局部滚动 (上拉事件就会失效)*/
+/* 不加这句就是全局滚动 (上拉事件就会失效)*/
 .page-loadmore-wrapper {
-  overflow: scroll;
-  padding-bottom:.5rem;
+  /* overflow: auto; */
+  /* height:100%; */
+  /* padding-bottom:.5rem; */
+  /* background:red; */
 }
 
 .mint-loadmore-bottom span {
@@ -145,8 +148,9 @@ export default {
 
 /* 样式 */
 .pubu {
-  background: #eee;
   padding: 0 0.1rem;
+  margin-bottom:.5rem;
+  background:#eee;
 }
 .container {
   max-width: 100%;

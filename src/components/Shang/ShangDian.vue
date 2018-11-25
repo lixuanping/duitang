@@ -3,8 +3,7 @@
 		<xheader />
 		<lun />
 		<Nav />
-		<button @click="aaa">拍照</button>
-		<!-- <tui /> -->
+		<tui />
 		<!-- <zhuan/> -->
 	</div>
 </template>

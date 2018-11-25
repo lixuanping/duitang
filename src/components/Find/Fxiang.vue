@@ -90,7 +90,7 @@ export default {
     tui: function() {
       location.href = "#/faxian";
       // $(window).scrollTop(this.scrollY);
-      $(window).scrollTop(1000);
+      // $(window).scrollTop(1000);
 
     },
     add: function() {

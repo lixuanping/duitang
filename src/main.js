@@ -90,6 +90,7 @@ const routes = [
 			},
 			{
 				path: 'shouye',
+				name: 'home',
 				component: shouye,//这个名字是引入名字 上面path要跟这个一样
 				meta: {
 					keepAlive: true
@@ -142,12 +143,25 @@ const routes = [
 ]
 
 
+// to: Route: 即将要进入的目标 路由对象
+// from: Route: 当前导航正要离开的路由
+// next: Function: 一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数。
 
 //把定义的路由赋予router  ....3
 const router = new VueRouter({
-	routes
+	routes,
+// 	scrollBehavior(to, from,savedPosition){
+// 		if(to.name == 'home'){
+// 			return {x: 0, y: window.myScroll || 0}
+// 		}
+// 	}
 })
-
+// router.beforeEach((to, from, next) => {
+// 	if(from.name == 'home'){
+// 		// console.log(1111)
+// 		window.myScroll = window.scrollY;
+// 	}
+// })
 
 //引入Vuex  状态管理工具
 import Vuex from 'vuex'

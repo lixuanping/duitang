@@ -6,6 +6,7 @@
         <p v-text="n" :class="{active:page==index}"></p>
       </li>
     </ul>
+     <!-- <router-view></router-view> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
