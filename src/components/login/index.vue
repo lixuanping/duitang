@@ -4,9 +4,21 @@
       <span @click="toggle">X</span>
     </header>
     <form @submit.prevent>
-      <input type="text" placeholder="请输入手机号码" id='username' v-model='user' v-focus><br>
-      <input type="password" placeholder="请输入密码" id='password' v-model='pass'><br>
-      <button @click="reg">登陆</button>
+      <input
+        type="text"
+        placeholder="请输入手机号码"
+        id='username'
+        v-model='user'
+        v-focus
+      ><br>
+      <input
+        type="password"
+        placeholder="请输入密码"
+        id='password'
+        v-model='pass'
+      ><br>
+      <button @click="login" v-if='judge'>登陆</button>
+      <button @click="reg" v-if='!judge'>注册</button>
     </form>
     <router-view></router-view>
   </div>
@@ -17,7 +29,8 @@ export default {
   data() {
     return {
       user: "",
-      pass: ""
+      pass: "",
+      judge:false
     };
   },
   directives: {
@@ -29,12 +42,45 @@ export default {
     }
   },
   methods: {
-    toggle: function() {
-      //点击顶部的X回到注册登陆页面
-      location.href = "#/Xuan";
+    //点击顶部的X回到注册登陆页面
+    toggle() {
+      this.$router.push({
+        path: "myDate"
+      });
     },
-    reg: function() {
-      //点击登陆的时候以手机号来注册
+    //点击登陆的时候以手机号来注册
+    login() {
+      var reg = /^1[3-9]\d{9}$/;
+      var self = this;
+      if (!reg.test(this.user)) {
+        console.log("输入不规范");
+        return false;
+      } else {
+        //如果符合规范则发起请求 看看是否已经注册
+        $.ajax({
+          url: "http://localhost:18090/e",
+          type: "get",
+          data: {
+            user: self.user,
+            pass: self.pass
+          },
+          success(res) {
+            if (res === "no") {
+              console.log("登陆失败");
+            } else {
+              //否则把用户名返回给前端 并写到sessionStorage
+              window.sessionStorage.setItem("name", self.user);
+              console.log("登陆成功");
+              self.$router.push({
+                path: "Me"
+              });
+            }
+          }
+        });
+      }
+    },
+    //点击注册的时候
+    reg(){
       var reg = /^1[3-9]\d{9}$/;
       if (!reg.test(this.user)) {
         alert("输入不规范");
@@ -48,21 +94,31 @@ export default {
             user: this.user,
             pass: this.pass
           },
-          success(a) {
+          success(res) {
             //如果用户名以存在则注册失败
-            if (a === "no") {
-              alert("登陆失败");
+            if (res === "no") {
+              alert("注册失败");
             } else {
               //否则把用户名返回给前端 并写到sessionStorage
-              window.sessionStorage.setItem("name", a);
-              location.href = "#/Me";
+              window.sessionStorage.setItem("name", res);
+              alert("注册成功");
+              this.$router.push({
+                  paht:'Me'
+              })
             }
           }
         });
       }
     }
   },
-  mounted() {}
+  created() {
+    //判断显示的是登陆还是注册
+    if (this.$route.query.id === 1 ) {
+        this.judge = true
+    } else {
+        this.judge = false
+    }
+  }
 };
 </script>
 
@@ -70,7 +126,7 @@ export default {
 /* 登陆页面 */
 #box {
   height: 6.66rem;
-  background: url("../../images/dd.jpg") 100% 100%;
+  background: url("../../assets/images/dd.jpg") 100% 100%;
   background-position: center center;
   background-size: cover;
   padding: 0;
@@ -123,7 +179,7 @@ form input {
   border: 0.01rem solid transparent;
   width: 100%;
   padding-left: 0.1rem;
-  background: transparent;
+  background: transparent !important;
   color: #fff;
   border-bottom: 0.01rem solid#fff;
 }

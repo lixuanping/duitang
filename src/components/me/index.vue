@@ -1,6 +1,8 @@
 <template>
     <div id="box">
         <header>
+            <div id='result'></div>
+            <input id="pic" type="file" name = 'pic' accept = "image/*" @change = "selectFile()"/>
             <span>我</span><span class="tui" @click="tui">退出</span>
         </header>
         <!-- 用户名 -->
@@ -42,7 +44,38 @@ export default {
     //点击退出的时候
     tui: function() {
       window.sessionStorage.removeItem("name");
-      location.href = "#/Footer/Xuan";
+      this.$router.push({
+        path:'myDate'
+      })
+    },
+    selectFile(val){
+        var form = new FormData();//通过HTML表单创建FormData对象
+        var files = document.getElementById('pic').files;;
+        if(files.length == 0){
+            return;
+        }
+        var file = files[0];
+        //把上传的图片显示出来
+        var reader = new FileReader();
+        // 将文件以Data URL形式进行读入页面
+        reader.readAsBinaryString(file);
+        reader.onload = function(f){
+            var result = document.getElementById("result");
+            var src = "data:" + file.type + ";base64," + window.btoa(this.result);
+            result.innerHTML = '<img src ="'+src+'"/>';
+        }
+
+        $.ajax({
+          url: "http://localhost:18090/m",
+          type: "get",
+          data: {
+            username: 123456,
+            filepath: src
+          },
+          success(res) {
+            console.log(res)
+          }
+        }
     }
   },
   computed: {

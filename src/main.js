@@ -3,28 +3,24 @@ import App from './App.vue'
 
 Vue.config.productionTip = false
 
+//引入jq
 import $ from 'jquery';
 window.$ = $;
 
 
-import MuseUI from 'muse-ui';
-import 'muse-ui/dist/muse-ui.css';
-Vue.use(MuseUI);
+// import MuseUI from 'muse-ui';
+// import 'muse-ui/dist/muse-ui.css';
+// Vue.use(MuseUI);
 
 
-import rem from './js/rem.js'//引入rem
-rem()//使用rem
+import rem from './lib/js/rem.js' //引入rem
+rem() //使用rem
 
-// 加载中字样
-import { Indicator } from 'mint-ui'
-Vue.prototype.$loading = Indicator
-// 上拉刷新
-import { Loadmore } from 'mint-ui';
+// import { Indicator } from 'mint-ui'
+// Vue.prototype.$loading = Indicator
+// import { Loadmore } from 'mint-ui';
 
-
-Vue.component(Loadmore.name, Loadmore);
-
-
+// Vue.component(Loadmore.name, Loadmore);
 
 // 图片懒加载
 import { Lazyload } from 'mint-ui';
@@ -162,13 +158,16 @@ const router = new VueRouter({
 // 		window.myScroll = window.scrollY;
 // 	}
 // })
+// import { Lazyload } from 'mint-ui';
+// Vue.use(Lazyload);
+
+//引入路由
+import router from "./router/index.js"
 
 //引入Vuex  状态管理工具
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
-// 思路是先把前端传过来的东西保存在vuex  然后再从vuex返回给前端  前面三部都是保存在Vuex
-// 执行顺序是前端触发第三步 然后再执行第二步  再执行第一步
 const store = new Vuex.Store({
 	// 状态
 	state: {
@@ -176,16 +175,15 @@ const store = new Vuex.Store({
 	},
 	mutations: {
 		changeSearchText(state, data) {
-			state.text = data;//索引值
+			state.text = data;
 		}
 	},
-	actions: {//固定写法 setSearchText是随便取的名字 但要跟前端那边触发的一样 
-		//前端就是触发setSearchText这个函数
-		setSearchText(context, data) {//data是前端传过来的参数
-			context.commit('changeSearchText', data)//changeSearchText是触发上面函数
-		}
+	actions: {
+    setSearchText(context, data) {
+      context.commit('changeSearchText', data)
+    }
 	},
-	getters: {//这一步是把存到vuex的值返回给前端  当然是要前端触发这个函数
+	getters: {
 		getSearchText(state) {
 			return state.text
 		}

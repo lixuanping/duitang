@@ -22,8 +22,6 @@ export default {
     return {
       question: "",
       page: 0,
-      // tab:[{title:'推荐',fontSize:'icon-fl-jia iconfont'},{title:'数据',fontSize:'icon-faxian iconfont'},
-      // {title:'商店',fontSize:'icon-dianpu iconfont'},{title:'我',fontSize:'icon-my iconfont'}],
       tab: ["推荐", "数据", "商店", "我"],
       FontSize: [
         "icon-fl-jia iconfont",
@@ -40,30 +38,40 @@ export default {
     }
   },
   methods: {
-    toggle: function(index) {
+    toggle(index) {
       this.page = index;
       //点击tab的时候切换到需要的页面
       if (index == 0) {
-        location.href = "#/ShouYe";
+        this.$router.push({
+          path:'home'
+        })
       } else if (index == 1) {
-        location.href = "#/faxian";
+        this.$router.push({
+          path:'Find'
+        })
       } else if (index == 2) {
-        location.href = "#/shang";
+        this.$router.push({
+          path:'shang'
+        })
       } else if (index == 3 && this.sessionStorage != null) {
         //判断是否登陆然后跳到对应的页面
-        location.href = "#/Me";
+        this.$router.push({
+          path:'Me'
+        })
       } else {
-        location.href = "#/Xuan";
+        this.$router.push({
+          path:'myDate'
+        })
       }
     }
   },
   mounted() {
     //为了刷新页面的时候  下面的颜色在当前页面
     switch (this.$route.path) {
-      case "/ShouYe":
+      case "/home":
         this.page = 0;
         break;
-      case "/faxian":
+      case "/Find":
         this.page = 1;
         break;
       case "/shang":

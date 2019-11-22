@@ -4,6 +4,7 @@
 		<lun />
 		<Nav />
 		<tui />
+		<!-- <tui /> -->
 		<!-- <zhuan/> -->
 	</div>
 </template>
