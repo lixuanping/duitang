@@ -4,9 +4,9 @@ var cheerio = require("cheerio");
 var express = require('express');
 var app = express();//默认用法  赋值给app
 // 引入封装好的数据库 写 读 查 改
-var xie = require("../js/dbxie.js");
-var cha = require("../js/dbcha.js");
-var gai = require("../js/dbgai.js");
+var xie = require("../lib/js/dbxie.js");
+var cha = require("../lib/js/dbcha.js");
+var gai = require("../lib/js/dbgai.js");
 
 // 专门处理post请求的
 var bodyParser = require('body-parser');
@@ -65,7 +65,6 @@ app.get('/c', function (req, res) {
     var num = req.query.start//前端传过来的东西
     request("https://www.duitang.com/napi/index/hot/?start="+num+"&limit=24&include_fields=sende", (err, a, body) => {
         if(err){
-            console.log('!!!!!!!!!!!!!!!!');
             return;
         }
         var list = JSON.parse(body).data.object_list//得到存放内容的数组
@@ -81,7 +80,7 @@ app.get('/d', function (req, res) {
     cha.query('username', {username:num.user}, function (argument) {//读取数据库 并返回给前端
         if(argument.length===0){//用户名不存在则写进数据库
             xie.query('username',[{username:num.user,password:num.pass}],function(argument){
-                res.send(num.user)
+                res.send('ok')
             })
         }else{
             res.send('no')
@@ -91,13 +90,14 @@ app.get('/d', function (req, res) {
 
 
 //登陆的路由
-app.post('/e', function (req, res) {
-    var num = req.body//前端传过来的东西
+app.get('/e', function (req, res) {
+    var num = req.query//前端传过来的东西
+    console.log(num)
     cha.query('username',{username:num.user,password:num.pass}, function (argument) {//读取数据库 并返回给前端
         if(argument.length===0){
             res.send('no')
         }else{
-            res.send(num.user)
+            res.send('ok')
         }
     })
 })
@@ -166,6 +166,24 @@ app.get('/l', function (req, res) {
     cha.query('car',{},function (argument) {//读取数据库 并返回给前端
         res.send(argument)
     })
+})
+
+//上传的头像
+app.get('/m', function (req, res) {
+    var num = req.query//前端传过来的东西
+    cha.query('username',{username:num.username}, function (argument) {//读取数据库 并返回给前端
+        if(argument.length===0){
+            res.send('no')
+        }else{
+            // 改  第一个是表名 第二个是改的条件 第三个是该过的内容 第四个是返回的
+            gai.query('username', { username: num.username }, {
+            $set: { file: num.filepath, file: num.filepath } },
+            function (argument) {//读取数据库 并返回给前端
+                
+            })
+        }
+    })
+    
 })
 
 // 端口
